@@ -1,0 +1,11 @@
+{
+  "name": "pdf_translator",
+  "version": "0.1.0",
+  "main": "index.js",
+  "license": "MIT",
+  "author": "oaarn",
+  "dependencies": {
+    "pdf.js-extract": "^0.2.0"
+  },
+  "type": "module"
+}
