@@ -5,7 +5,10 @@
   "license": "MIT",
   "author": "oaarn",
   "dependencies": {
-    "pdf.js-extract": "^0.2.0"
+    "annotpdf": "^1.0.15",
+    "docx": "^7.8.1",
+    "pdf.js-extract": "^0.2.0",
+    "xliff": "^6.1.0"
   },
   "type": "module"
 }
