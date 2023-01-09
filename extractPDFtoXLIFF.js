@@ -71,7 +71,7 @@ async function extract(filePath) {
             y: element.content[c].y,
             page: i,
           });
-          console.log(pageContent);
+
           pageContent = "";
         }
 
@@ -89,13 +89,11 @@ async function extract(filePath) {
             y: element.content[c].y,
             page: i,
           });
-          console.log(pageContent);
+
           pageContent = "";
         } else {
           pageContent = pageContent + element.content[c].str;
         }
-
-        // console.log(pageContent);
       } else if (c == element.content.length - 1) {
         pageContent = pageContent + element.content[c].str;
 
@@ -105,42 +103,19 @@ async function extract(filePath) {
           y: element.content[c].y,
           page: i,
         });
-        console.log(pageContent);
         pageContent = "";
       } else {
         pageContent = pageContent + element.content[c].str;
       }
     }
 
-    // let re1 = /(\n)([a-z])/gm;
-    // pageContent.text = pageContent.text.replace(re1, " $2");
-
-    // let re15 = /(\n)((\s)[a-z])/gm;
-    // pageContent.text = pageContent.text.replace(re15, "$2");
-
-    // let re155 = /([a-z])(\n)((\s)[A-Z])/gm;
-    // pageContent.text = pageContent.text.replace(re155, "$1$3");
-
-    // let re3 = /(\n)(-)(\n)([^A-Z])/gm;
-    // pageContent.text = pageContent.text.replace(re3, "$2$4");
-    // let re2 = /(-)(\n)/gm;
-    // pageContent.text = pageContent.text.replace(re2, "$1 ");
-    // let re25 = /(,)(\n)/gm;
-    // pageContent.text = pageContent.text.replace(re25, "$1 ");
-
-    // let re4 = /\.([A-Z])/gm;
-    // pageContent.text = pageContent.text.replace(re4, ". $1");
-
-    // pageContent.text = pageContent.text.replace(/  +/gm, " ");
-
-    var parObjects = [];
     for (let p = 0; p < pars.length; p++) {
-      const parText = pars[p];
-      docPages.push(parText);
+      docPages.push(pars[p]);
     }
   }
 
   let destPath = filePath.substr(0, filePath.lastIndexOf(".pdf")) + ".xliff";
+
   await createXLIFF(destPath, docPages);
 }
 
@@ -152,13 +127,11 @@ async function parObjToJSON(paragraphObj) {
     const textItem = paragraphObj[i].text;
     const coords = [paragraphObj[i].x, paragraphObj[i].y];
     const page = paragraphObj[i].page;
-    console.log(page);
 
     sourceJS[`key${i}`] = textItem;
     targetJS[`key${i}`] = "";
     notes[`key${i}`] = JSON.stringify({ page: page, coords: coords });
   }
-  // console.log(JSON.stringify(js));
   return { sourceObj: sourceJS, targetObj: targetJS, notes: notes };
 }
 

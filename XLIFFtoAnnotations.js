@@ -38,21 +38,25 @@ function addAnnotation(translationObj, pdfPath, pdfPathNew) {
   const ns = translationObj.resources.namespace1;
 
   AnnotationFactory.loadFile(pdfPath).then((factory) => {
+    console.log(Object.entries(ns).length - 1);
+
     for (var key in ns) {
       let parsedNote = JSON.parse(ns[key].note);
+      console.log(key);
       factory.createTextAnnotation({
         page: parsedNote.page,
         rect: [
-          parsedNote.coords[0] - 20,
-          792 - parsedNote.coords[1] - 20,
           parsedNote.coords[0],
-          792 - parsedNote.coords[1],
+          792 - parsedNote.coords[1] + 72,
+          parsedNote.coords[0] - 20,
+          792 - parsedNote.coords[1] - 20 + 72,
         ],
-        contents: ns[key].source,
+        contents: ns[key].target,
         color: { r: 254, g: 208, b: 47 },
       });
     }
     factory.save(pdfPathNew);
+    console.log("saved new pdf");
   });
 }
 
