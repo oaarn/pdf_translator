@@ -40,10 +40,7 @@ function getFiles(Directory) {
 }
 
 async function extract(filePath) {
-  var options = {
-    normalizeWhitespace: false,
-    disableCombineTextItems: true, // default:`false` - do not attempt to combine  same line {@link TextItem}'s.
-  };
+  var options = {};
 
   var result = await pdfExtract.extract(filePath, options);
 
@@ -66,7 +63,7 @@ async function extract(filePath) {
           pageContent = pageContent + element.content[c].str;
 
           pars.push({
-            text: pageContent,
+            text: pageContent.replace(/  +/gm, " "),
             x: element.content[c].x,
             y: element.content[c].y,
             page: i,
@@ -84,7 +81,7 @@ async function extract(filePath) {
           pageContent = pageContent + element.content[c].str;
 
           pars.push({
-            text: pageContent,
+            text: pageContent.replace(/  +/gm, " "),
             x: element.content[c].x,
             y: element.content[c].y,
             page: i,
@@ -98,14 +95,14 @@ async function extract(filePath) {
         pageContent = pageContent + element.content[c].str;
 
         pars.push({
-          text: pageContent,
+          text: pageContent.replace(/  +/gm, " "),
           x: element.content[c].x,
           y: element.content[c].y,
           page: i,
         });
         pageContent = "";
       } else {
-        pageContent = pageContent + element.content[c].str;
+        pageContent = pageContent + element.content[c].str + " ";
       }
     }
 
