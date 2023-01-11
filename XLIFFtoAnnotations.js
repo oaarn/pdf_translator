@@ -4,6 +4,9 @@ import path from "path";
 import xliff from "xliff";
 import { AnnotationFactory } from "annotpdf";
 
+import { PDFExtract } from "pdf.js-extract";
+const pdfExtract = new PDFExtract();
+
 async function main() {
   const argPath = process.argv.slice(2)[0];
 
@@ -14,7 +17,7 @@ async function main() {
   let pdfPathNew =
     argPath.substring(0, argPath.lastIndexOf(".xliff")) + "_new.pdf";
 
-  addAnnotation(res, pdfPath, pdfPathNew);
+  await addAnnotation(res, pdfPath, pdfPathNew);
   console.log("Completed All XLIFF Files");
 }
 
@@ -34,22 +37,31 @@ function getFiles(Directory) {
   return Files;
 }
 
-function addAnnotation(translationObj, pdfPath, pdfPathNew) {
+async function addAnnotation(translationObj, pdfPath, pdfPathNew) {
+  const offsetAmount = 20;
+
   const ns = translationObj.resources.namespace1;
+
+  const sourcePDF = await pdfExtract.extract(pdfPath);
+  const pages = sourcePDF.pages;
 
   AnnotationFactory.loadFile(pdfPath).then((factory) => {
     console.log(Object.entries(ns).length - 1);
 
     for (var key in ns) {
       let parsedNote = JSON.parse(ns[key].note);
+
+      let pageHeight = pages[parsedNote.page].pageInfo.height;
+
       console.log(key);
+      console.log(pageHeight);
       factory.createTextAnnotation({
         page: parsedNote.page,
         rect: [
-          parsedNote.coords[0],
-          792 - parsedNote.coords[1] + 72,
           parsedNote.coords[0] - 20,
-          792 - parsedNote.coords[1] - 20 + 72,
+          pageHeight - parsedNote.coords[1] - 20 + offsetAmount,
+          parsedNote.coords[0],
+          pageHeight - parsedNote.coords[1] + offsetAmount,
         ],
         contents: ns[key].target,
         color: { r: 254, g: 208, b: 47 },
